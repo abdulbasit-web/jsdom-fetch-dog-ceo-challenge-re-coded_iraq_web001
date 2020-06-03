@@ -1,9 +1,9 @@
-console.log('%c HI', 'color: firebrick')
 // console.log("%c HI", "color: firebrick");
 
 document.addEventListener("DOMContentLoaded", () => {
   const imgContainer = document.querySelector("#dog-image-container");
   const breedContainer = document.querySelector("#dog-breeds");
+  const selectDog = document.querySelector("#breed-dropdown");
   const imgUrl = "https://dog.ceo/api/breeds/image/random/4";
   const breedUrl = "https://dog.ceo/api/breeds/list/all";
 
@@ -26,11 +26,20 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch(breedUrl)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       const breedObj = data["message"];
-      console.log(breedObj);
       for (const breed in breedObj) {
-        breedContainer.insertAdjacentHTML("afterbegin", `<li>${breed}</li>`);
+        selectDog.addEventListener("change", () => {
+          if (selectDog.value == breed.charAt(0)) {
+            const li = document.createElement("li");
+            li.innerHTML = breed;
+            li.addEventListener("click", () => {
+              const color =
+                "#" + ((Math.random() * 0xffffff) << 0).toString(16);
+              li.style.color = color;
+            });
+            breedContainer.appendChild(li);
+          }
+        });
       }
     });
 });
